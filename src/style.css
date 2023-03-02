@@ -1,0 +1,79 @@
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 62.5%;/*rem算出をしやすくするために*/
+}
+
+body{
+    width: 100%;
+}
+
+#main{
+    text-align: center;
+}
+
+.btn-border {
+    border: 2px solid #000;
+    border-radius: 0;
+    background: #fff;
+  }
+  
+.btn-border:hover {
+    color: #fff;
+    background: #000;
+  }
+
+.btn{
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.5;
+    position: relative;
+    display: inline-block;
+    padding: 1rem 4rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    color: #212529;
+    border-radius: 0.5rem;    
+
+}
+
+.wordbtn {
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 5% auto;
+    text-align: center;
+    justify-content: center;
+}
+
+.btndiv{
+    width: calc(100%/3);
+}
+
+.word {
+    width: 145px;
+    height: 60px;
+    margin: 60px;
+}
+
+.selected{
+    display: inline-block;
+    margin: 0% 1%;
+}
+
