@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AI Speculation Quiz</title>
+        <meta name="viewport" content="width=device-width scale=1.0"/>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <div id="main">
+            <h1>AI Speculation Quiz</h1>
+            <h2>単語を3つ選んでください</h2>
+            <div v-for="i in word_list" :key="i">
+                <button @click="input_answer(i)" :id="i">{{ i }}</button>
+            </div>
+            <h3>選んでいる単語</h3>
+            <div v-for="i in select_list" :key="i">
+                <h4>{{ i }}</h4>
+            </div>
+            <button @click="makeimg">作成</button>
+            <div>
+                <img id="img" width="1024" height="1024">
+            </div>
+        </div>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="front.js"></script>
+    </body>
+</html>
