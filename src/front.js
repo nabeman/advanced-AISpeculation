@@ -1,13 +1,14 @@
 const { createApp, reactive } = Vue;
 // const { axios } = Axios;
 const MAXLEN = 3;
-const TIMES = 4;
+const TIMES = 4; //繰り返す回数
 
 const QuizData = reactive({
     word_list: ["tomato", "internet", "urban", "design", "game", "glass", "money", "book"],
     select_list: [], //画像生成に選んだ単語リスト
     imgsrc: "",
     turn_flag: false, //選ぶ人 false-> A, true->B
+    end_flag: 0,      //終了判定フラグ
     componentId: "select-word",
     a_point: 0,
     b_point: 0,
@@ -38,6 +39,7 @@ app.component(
             return{
                 word_list: QuizData.word_list,
                 select_list: [],
+                turn_flag:QuizData.turn_flag
             }
         },
         methods: {
@@ -66,12 +68,14 @@ app.component(
                 QuizData.select_list = this.select_list; //正解を格納
                 this.select_list = [];
                 QuizData.imgsrc = "data:image/png;base64," + img;
-                QuizData.turn_flag = !QuizData.turn_flag;
+                // QuizData.turn_flag = !QuizData.turn_flag;
                 QuizData.componentId = "answer";
                 // document.getElementById("img").src = "data:image/png;base64," + img;
             },
         },
         template: `
+        <h1 v-if="!turn_flag">Aが出題者です</h1>
+        <h1 v-else>Bが出題者です</h1>
         <h2>単語を3つ選んでください</h2>
         <div v-for="i in word_list" :key="i">
             <button @click="input_answer(i)" :id="i">{{ i }}</button>
@@ -114,7 +118,7 @@ app.component(
         `
     }
 )
-
+//推測画面を表示するコンポーネント
 app.component(
     'answer',
     {
@@ -123,7 +127,7 @@ app.component(
                 word_list: QuizData.word_list,
                 select_list: [], //回答者が選択した単語リスト
                 imgsrc: QuizData.imgsrc,
-                point: 0
+                point: 0,
             }
         },
         methods: {
@@ -143,7 +147,7 @@ app.component(
                     let checklist = QuizData.select_list.slice();
 
                     console.log(QuizData.select_list);
-
+                    QuizData.spec_list.push(this.select_list[i]);
                     checklist.push(this.select_list[i]);
                     let newlist = new Set(checklist);
                     if(newlist.size == len){
@@ -152,10 +156,23 @@ app.component(
                 }
                 QuizData.point = this.point;
                 console.log(`現在の得点は${QuizData.point}です`);
+                
+                //turn_flagがfalseのときBのポイント,trueの時Aのポイントに加算
+                if (QuizData.turn_flag){
+                    QuizData.b_point+=QuizData.point;
+                }else{
+                    QuizData.a_point+=QuizData.point;
+                    
+                }
+                console.log(`現在のAの得点は${QuizData.a_point}です`);
+                console.log(`現在のBの得点は${QuizData.b_point}です`);
+
                 QuizData.componentId = "result";
             }
         },
         template: `
+            <h1 v-if="turn_flag">Aが回答者です</h1>
+            <h1 v-else>Bが回答者です</h1>
             <img id="img" :src="imgsrc" width="1024" height="1024" />
             <div v-for="i in word_list" :key="i">
             <button @click="input_answer(i)" :id="i">{{ i }}</button>
@@ -176,19 +193,67 @@ app.component(
             return{
                 point: QuizData.point,
                 imgsrc: QuizData.imgsrc,
+                a_point:QuizData.a_point,
+                b_point:QuizData.b_point,
+                select_list:QuizData.select_list
+                // end_flag:QuizData.end_flag
             }
         },
         methods: {
             next_turn(){
-                QuizData.componentId = "select-word";
+                QuizData.end_flag++;
+                if(QuizData.end_flag >= TIMES){
+                    console.log("おわりました");
+                    QuizData.componentId = "byebye"
+                }else{
+                    QuizData.turn_flag = !QuizData.turn_flag;
+                    QuizData.componentId = "select-word";
+                }
             }
         },
         template:`
             <img id="img" :src="imgsrc" width="1024" height="1024" />
             <h1>{{ point }}点です</h1>
+            <h1>推測：</h1>
+
+            <h1 >この画像は…
+            <div v-for="i in select_list">{{i}},</div>
+            を用いて生成されました</h1>
+            <h1>Aのポイントは{{ a_point }}点です</h1>
+            <h1>Bのポイントは{{ b_point }}点です</h1>
             <button type="button" @click=next_turn>次のターンに進む</button>
         `
     }
 )
+app.component(
+    'byebye',
+    {
+        data(){
+            return{
+                a_point:QuizData.a_point,
+                b_point:QuizData.b_point
+            }
+        },
+        
+        methods: {
+            next_game(){
+                //次のゲームに向けて初期化
+                QuizData.a_point = 0;
+                QuizData.b_point = 0;
+                QuizData.end_flag = 0;
+                QuizData.turn_flag = false;
+                QuizData.componentId = "select-word";
+            }
+        },
+        template:`
+            <h1>Aのポイントは{{a_point }}点です</h1>
+            <h1>Bのポイントは{{ b_point }}点です</h1>
+            // 勝敗判定
+            <h1 v-if = "a_point > b_point">Aの勝利です</h1>
+            <h1 v-else-if="a_point < b_point" >Bの勝利です</h1>
+            <h1 v-else>引き分けだぁ！</h1>
+            <button type="button" @click=next_game>次のゲームへ</button>
+        `
+    })
 
 app.mount("#main");

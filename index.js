@@ -19,7 +19,8 @@ async function RequestImage(words){
     let response = await openai.createImage({
         prompt: words,
         n: 1,
-        size: "1024x1024",
+        // size: "1024x1024",
+        size: "256x256",
         response_format: "b64_json"
     })
     let image_url = response.data.data[0].b64_json;
