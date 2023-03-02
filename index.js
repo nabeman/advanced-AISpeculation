@@ -4,7 +4,7 @@ const urlencoded = require('express');
 const { default: axios } = require('axios');
 require('dotenv').config();
 
-const APIKEY = process.env.OPENAI_API_KEY;
+const APIKEY = process.env.APIKEY;
 const app = express();
 const PORT = 3000;
 
