@@ -10,9 +10,11 @@ const QuizData = reactive({
     imgsrc: "",
     turn_flag: false, //選ぶ人 false-> A, true->B
     end_flag: 0,      //終了判定フラグ
-    componentId: "select-word",
+    componentId: "start",
     a_point: 0,
     b_point: 0,
+    a_name: "",
+    b_name: "",
 });
 
 const app = createApp({
@@ -32,6 +34,36 @@ const app = createApp({
     },
 })
 
+app.component(
+    'start',
+    {
+        data(){
+            return{
+                a_name: "",
+                b_name: "",
+            }
+        },
+        methods: {
+            start(){
+                QuizData.a_name = this.a_name;
+                QuizData.b_name = this.b_name;
+    
+                QuizData.componentId = "select-word";
+            }
+        },
+        template: `
+            <div>
+                <p class="title">AI Speculation Quiz</p>
+                <div>
+                    <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
+                    <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
+                    <button @click="start" class="btn btn-border">始める</button>
+                </div>
+            </div>
+        `
+    }
+)
+
 //画像を生成するための単語を選ぶコンポーネント
 app.component(
     'select-word',
@@ -42,7 +74,9 @@ app.component(
                 select_list: [],
                 turn_flag:QuizData.turn_flag,
                 btn_list: document.querySelectorAll('.word'), //選択ボタンのDOMリストを取得
-                notok: false
+                notok: false,
+                a_name: QuizData.a_name,
+                b_name: QuizData.b_name,
             }
         },
         methods: {
@@ -102,8 +136,8 @@ app.component(
             },
         },
         template: `
-        <h1 v-if="!turn_flag">Aが出題者です</h1>
-        <h1 v-else>Bが出題者です</h1>
+        <h1 v-if="!turn_flag">{{ a_name }}が出題者です</h1>
+        <h1 v-else>{{ b_name }}が出題者です</h1>
         <h2>単語を3つ選んでください</h2>
         <div class="wordbtn">
             <div v-for="i in word_list" :key="i" class="btndiv">
@@ -163,16 +197,38 @@ app.component(
                 select_list: [], //回答者が選択した単語リスト
                 imgsrc: QuizData.imgsrc,
                 point: 0,
+                a_name: QuizData.a_name,
+                b_name: QuizData.b_name,
             }
         },
         methods: {
             input_answer(word){
-                if(this.select_list.length >= MAXLEN){
-                    this.select_list.push(word);
-                    this.select_list.shift();
+                this.btn_list = document.querySelectorAll('.word');
+                let old_word = "";
+                if(!this.select_list.includes(word)){
+                    if(this.select_list.length >= MAXLEN){
+                        old_word = this.select_list[0];
+                        this.select_list.push(word);
+                        this.select_list.shift();
+                    }
+                    else{
+                        this.select_list.push(word);
+                    }
+                }else{
+                    old_word = word;
+                    this.select_list.splice(this.select_list.indexOf(old_word),1);
                 }
-                else{
-                    this.select_list.push(word);
+
+                // this.select_list = Array.from(new Set(this.select_list));
+
+                for(let i = 0; i < this.btn_list.length; i++){
+                    if(old_word == this.btn_list[i].id){
+                        this.btn_list[i].style.color = "#000";
+                        this.btn_list[i].style.background = "#fff";
+                    }else if(word == this.btn_list[i].id){
+                        this.btn_list[i].style.color = "#fff";
+                        this.btn_list[i].style.background = "#000";
+                    }
                 }
                 return console.log(word);
             },
@@ -206,8 +262,8 @@ app.component(
             }
         },
         template: `
-            <h1 v-if="turn_flag">Aが回答者です</h1>
-            <h1 v-else>Bが回答者です</h1>
+            <h1 v-if="turn_flag">{{ a_name }}が回答者です</h1>
+            <h1 v-else>{{ b_name }}が回答者です</h1>
             <img id="img" :src="imgsrc" width="256" height="256"/>
             <div class="wordbtn">
                 <div v-for="i in word_list" :key="i" class="btndiv">
@@ -234,6 +290,8 @@ app.component(
                 b_point:QuizData.b_point,
                 select_list:QuizData.select_list,
                 spec_list: QuizData.spec_list,
+                a_name: QuizData.a_name,
+                b_name: QuizData.b_name,
             }
         },
         methods: {
@@ -255,8 +313,8 @@ app.component(
             <h1 >この画像は…
             <div v-for="i in select_list">{{i}},</div>
             を用いて生成されました</h1>
-            <h1>Aのポイントは{{ a_point }}点です</h1>
-            <h1>Bのポイントは{{ b_point }}点です</h1>
+            <h1>{{ a_name }}のポイントは{{ a_point }}点です</h1>
+            <h1>{{ b_name }}のポイントは{{ b_point }}点です</h1>
             <div v-for="i in spec_list">
                 {{ i }}
             </div>
@@ -271,7 +329,9 @@ app.component(
         data(){
             return{
                 a_point:QuizData.a_point,
-                b_point:QuizData.b_point
+                b_point:QuizData.b_point,
+                a_name: QuizData.a_name,
+                b_name: QuizData.b_name,
             }
         },
         
@@ -282,12 +342,12 @@ app.component(
                 QuizData.b_point = 0;
                 QuizData.end_flag = 0;
                 QuizData.turn_flag = false;
-                QuizData.componentId = "select-word";
+                QuizData.componentId = "select-word";    
             }
         },
         template:`
-            <h1>Aのポイントは{{a_point }}点です</h1>
-            <h1>Bのポイントは{{ b_point }}点です</h1>
+            <h1>{{ a_name }}のポイントは{{a_point }}点です</h1>
+            <h1>{{ b_name }}のポイントは{{ b_point }}点です</h1>
             <h1 v-if = "a_point > b_point">Aの勝利です</h1>
             <h1 v-else-if="a_point < b_point" >Bの勝利です</h1>
             <h1 v-else>引き分けだぁ！</h1>
