@@ -11,6 +11,8 @@ const QuizData = reactive({
     select_list: [], //画像生成に選んだ単語リスト
     spec_list: [], //推測者が選んだリスト
     imgsrc: "",
+    a_img: [], //aが生成した画像のsrc
+    b_img: [], //bが生成した画像のsrc
     turn_flag: false, //選ぶ人 false-> A, true->B
     end_flag: 0,      //終了判定フラグ
     componentId: "start",
@@ -211,6 +213,11 @@ app.component(
                 
             },
             set_q(){
+                if(!QuizData.turn_flag){
+                    QuizData.b_img.push(this.imgsrc);
+                }else{
+                    QuizData.a_img.push(this.imgsrc);
+                }
                 QuizData.componentId = "answer";
             },
         computed:{
@@ -421,6 +428,8 @@ app.component( //最終ページ
                 b_point:QuizData.b_point,
                 a_name: QuizData.a_name,
                 b_name: QuizData.b_name,
+                a_img: QuizData.a_img,
+                b_img: QuizData.b_img,
             }
         },
         
@@ -431,16 +440,28 @@ app.component( //最終ページ
                 QuizData.b_point = 0;
                 QuizData.end_flag = 0;
                 QuizData.turn_flag = false;
-                QuizData.componentId = "select-word";    
+                QuizData.componentId = "start";    
             }
         },
         template:`
-            <h1>{{ a_name }}のポイントは{{a_point }}点です</h1>
-            <h1>{{ b_name }}のポイントは{{ b_point }}点です</h1>
+        <div class="result_page">
+            <div class="result_point">
+                {{ a_name }}のポイントは{{ a_point }}点です
+                <div v-for="i in a_img" class="result_img">
+                    <img :src="i" width="256" height="256" />
+                </div>
+            </div>
+            <div class="result_point">
+                {{ b_name }}のポイントは{{ b_point }}点です
+                <div v-for="i in b_img" class="result_img">
+                    <img :src="i" width="256" height="256" />
+                </div>
+            </div>
+        </div>
             <h1 v-if = "a_point > b_point">Aの勝利です</h1>
             <h1 v-else-if="a_point < b_point" >Bの勝利です</h1>
             <h1 v-else>引き分けだぁ！</h1>
-            <button type="button" @click=next_game>次のゲームへ</button>
+            <button type="button" @click=next_game class="btn btn-border aiueo">ホームに戻る</button>
         `
     })
 

@@ -225,3 +225,25 @@ li{
   color: aliceblue;
   font-size: 18px;
 }
+
+.result_page{
+  display: flex;
+  justify-content: center;
+  margin-top: 70px;
+}
+
+.result_point{
+  display: inline-block;
+  font-size: 30px;
+  color: aliceblue;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.aiueo{
+  padding: 15px 60px;
+}
+
+.result_img{
+  margin: 10px 0px;
+}
