@@ -27,6 +27,7 @@ body{
 h1, h2, h3{
   color: aliceblue;
   margin-top: 0;
+  
 }
 
 #main{
@@ -196,4 +197,31 @@ li{
 
 .aaa{
   margin-right: 10px;
+}
+
+.point{
+  font-size: 30px;
+  margin-right: 10px;
+  color: aliceblue;
+}
+
+.new-selected{
+  color: aliceblue;
+  display: inline-block;
+  margin: 0% 1%;
+  font-size: 36px;
+  font-weight: 500;
+}
+
+.result-doc {
+  margin-bottom: 0 !important;
+}
+
+.answer{
+  margin-bottom: 20px;
+}
+
+.wwwww{
+  color: aliceblue;
+  font-size: 18px;
 }

@@ -391,17 +391,18 @@ app.component(
         },
         template:`
             <img id="img" :src="imgsrc" width="256" height="256" />
-            <h1>{{ point }}点です</h1>
-
-            <h1 >この画像は…
-            <div v-for="i in select_list">{{i}},</div>
-            を用いて生成されました</h1>
-            <h1>{{ a_name }}のポイントは{{ a_point }}点です</h1>
-            <h1>{{ b_name }}のポイントは{{ b_point }}点です</h1>
-            <div v-for="i in spec_list">
-                {{ i }}
+            <div>
+                <h1 class="result_doc">この画像の生成に用いた単語は</h1>
+                <div class="answer">
+                    <span v-for="i in select_list" class="new-selected">{{ i }}</span>
+                </div>
             </div>
-            <p>で推測しています</p>
+            <h1 v-if="turn_flag" class="result_doc">{{ a_name }}の推測した単語は</h1>
+            <h1 v-else class="result_doc">{{ b_name }}の推測した単語は</h1>
+            <div class="answer">
+                <span v-for="i in spec_list" class="new-selected">{{ i }}</span>
+            </div>
+            <p><span class="point">{{ point }}</span><span class="wwwww">point</span></p>
             <button type="button" @click=next_turn class="btn btn-border make">次のターンに進む</button>
         `
     }
