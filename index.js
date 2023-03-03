@@ -4,8 +4,9 @@ const urlencoded = require('express');
 const { default: axios } = require('axios');
 require('dotenv').config();
 const functions = require('firebase-functions');
+const { defineString } = require('firebase-functions/params');
 
-const APIKEY = process.env.APIKEY != null ? process.env.APIKEY : encodeURIComponent(functions.config().openai.apikey);
+const APIKEY = defineString('APIKEY').value();
 const app = express();
 const PORT = 3000;
 
