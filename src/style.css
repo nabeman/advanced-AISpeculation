@@ -145,3 +145,17 @@ h1, h2, h3{
   background-color:#fff;
   outline: 1rem double #1cf7a3;
 }
+.flex-btn{
+  display: flex;
+  justify-content: space-between;
+}
+.right{
+  /* float: right; */
+  display: flex;
+  justify-content: flex-end;
+}
+.left{
+  /* float: left; */
+  display: flex;
+  justify-content: flex-start;
+}

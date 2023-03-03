@@ -78,24 +78,26 @@ app.component(
                     <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
                     <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
                 </ol>
-                <h2><a href="#inline2" class="inline2">次へ</a></h2>
+                <div class="right"><a href="#inline2" class="inline2">次へ</a></div>
                 </div>
 
                 <div class="modaal" id="inline2" style="display:none;">
-                <ol>
-                <li>プレイヤー2は生成された画像を見て、生成に使われた単語を推測します。</li>
-                <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
-                </ol>
-                <h2><a href="#inline" class="inline">戻る</a></h2>
-                <h2><a href="#inline3" class="inline3">次へ</a></h2>
+                    <ol>
+                        <li>プレイヤー2は生成された画像を見て、生成に使われた単語を推測します。</li>
+                        <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
+                    </ol>
+                    <div class="flex-btn">
+                        <div class="left"><a href="#inline" class="inline">戻る</a></div>
+                        <div class="right"><a href="#inline3" class="inline3">次へ</a></div>
+                    </div>
                 </div>
 
                 <div class="modaal" id="inline3" style="display:none;">
-                <ol>                  
-                    <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
-                    <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
-                </ol>
-                <h2><a href="#inline2" class="inline2">戻る</a></h2>
+                    <ol>                  
+                        <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
+                        <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
+                    </ol>
+                    <div class="left"><a href="#inline2" class="inline2">戻る</a></div>
                 </div>
             </div>
         `
