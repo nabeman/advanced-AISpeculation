@@ -1,7 +1,7 @@
 const { createApp, reactive } = Vue;
 // const { axios } = Axios;
 const MAXLEN = 3;
-const TIMES = 2; //繰り返す回数
+const TIMES = 4; //繰り返す回数
 
 const QuizData = reactive({
     word_list: ["tomato", "internet", "urban", "design", "game", "glass", "money", "book", "beach"],
