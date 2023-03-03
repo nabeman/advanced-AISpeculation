@@ -18,17 +18,17 @@ const QuizData = reactive({
 });
 
 const app = createApp({
-    data(){
-        return{
+    data() {
+        return {
             componentId: QuizData.componentId,
             turn_flag: QuizData.turn_flag,
         }
     },
     computed: {
-        currentId(){
+        currentId() {
             return QuizData.componentId;
         },
-        currentflag(){
+        currentflag() {
             return QuizData.turn_flag;
         }
     },
@@ -37,17 +37,17 @@ const app = createApp({
 app.component(
     'start',
     {
-        data(){
-            return{
+        data() {
+            return {
                 a_name: "",
                 b_name: "",
             }
         },
         methods: {
-            start(){
+            start() {
                 QuizData.a_name = this.a_name;
                 QuizData.b_name = this.b_name;
-    
+
                 QuizData.componentId = "select-word";
             }
         },
@@ -64,19 +64,57 @@ app.component(
                     </div>
                 </div>
                 
-                <h2>遊び方</h2>
+                
+
+                <h3>Let's enjoy!!</h3>
+
+                <h2><a href="#inline" class="inline">遊び方</a></h2>
+
+                <div class="modaal" id="inline" style="display:none;">
                 このゲームは二人用です。
                 一台のPC、スマートフォンで遊ぶことを想定しています。
                 画像生成AI(<a href="https://labs.openai.com/">DALL-E</a>)を用いています。
-                <ol>
-                    <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
-                    <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
-                    <li>プレイヤー2は生成された画像を見て、生成に使われた単語を推測します。</li>
-                    <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
-                    <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
-                    <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
-                </ol>
-                <h3>Let's enjoy!!</h3>
+                    <ol>
+                        <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
+                        <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
+                    </ol>
+                    <div class="right">
+                        <div class="btn-box">
+                            <a href="#inline2" class="inline2 btn btn-border make">次へ</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modaal" id="inline2" style="display:none;">
+                    <ol>
+                        <li>プレイヤー2は生成された画像を見て、生成に使われた単語を推測します。</li>
+                        <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
+                    </ol>
+                    <div class="flex-btn">
+                        <div class="left">
+                            <div class="btn-box">
+                                <a href="#inline" class="inline btn btn-border make">戻る</a>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="btn-box">
+                                <a href="#inline3" class="inline3 btn btn-border make">次へ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modaal" id="inline3" style="display:none;">
+                    <ol>                  
+                        <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
+                        <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
+                    </ol>
+                    <div class="left">
+                        <div class="btn-box">
+                            <a href="#inline2" class="inline2 btn-box btn btn-border make">戻る</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         `
     }
@@ -86,84 +124,84 @@ app.component(
 app.component(
     'select-word',
     {
-        data(){
-            return{
+        data() {
+            return {
                 word_list: QuizData.word_list,
                 select_list: [],
-                turn_flag:QuizData.turn_flag,
+                turn_flag: QuizData.turn_flag,
                 btn_list: document.querySelectorAll('.word'), //選択ボタンのDOMリストを取得
                 make_mes: "作成する",
                 imgsrc: QuizData.imgsrc,
                 made: false, //作成フラグ
-                notok: false, 
+                notok: false,
                 a_name: QuizData.a_name,
                 b_name: QuizData.b_name,
             }
         },
         methods: {
-            input_answer(word){
+            input_answer(word) {
                 this.btn_list = document.querySelectorAll('.word');
                 let old_word = "";
-                if(!this.select_list.includes(word)){
-                    if(this.select_list.length >= MAXLEN){
+                if (!this.select_list.includes(word)) {
+                    if (this.select_list.length >= MAXLEN) {
                         old_word = this.select_list[0];
                         this.select_list.push(word);
                         this.select_list.shift();
                     }
-                    else{
+                    else {
                         this.select_list.push(word);
                     }
-                }else{
+                } else {
                     old_word = word;
-                    this.select_list.splice(this.select_list.indexOf(old_word),1);
+                    this.select_list.splice(this.select_list.indexOf(old_word), 1);
                 }
 
                 // this.select_list = Array.from(new Set(this.select_list));
 
-                for(let i = 0; i < this.btn_list.length; i++){
-                    if(old_word == this.btn_list[i].id){
+                for (let i = 0; i < this.btn_list.length; i++) {
+                    if (old_word == this.btn_list[i].id) {
                         this.btn_list[i].style.color = "#000";
                         this.btn_list[i].style.background = "#fff";
-                    }else if(word == this.btn_list[i].id){
+                    } else if (word == this.btn_list[i].id) {
                         this.btn_list[i].style.color = "#fff";
                         this.btn_list[i].style.background = "#000";
                     }
                 }
                 return console.log(word);
             },
-            makeimg(){
-                if(this.select_list.length > 0){
+            makeimg() {
+                if (this.select_list.length > 0) {
                     this.notok = false;
                     let words = `${this.select_list[0]} ${this.select_list[1]} ${this.select_list[2]}`
                     let post = axios.post("/", { word: words }).then((response) => {
                         console.log("postで送信");
                         console.log(response);
                         this.catchimg(response.data);
-                    }).catch((err) =>{
-                        console.log("エラー");           
-                        console.log(err);    
+                    }).catch((err) => {
+                        console.log("エラー");
+                        console.log(err);
                     });
-                }else{
+                } else {
                     this.notok = true;
                 }
             },
-            catchimg(img){
+            catchimg(img) {
                 //imgはbase64形式
                 QuizData.select_list = this.select_list; //正解を格納
                 QuizData.imgsrc = "data:image/png;base64," + img;
                 this.make_mes = "作り直す"
                 this.imgsrc = QuizData.imgsrc;
                 this.made = true;
-                
+
             },
-            set_q(){
+            set_q() {
                 QuizData.componentId = "answer";
             },
-        computed:{
-            ret_img(){
-                return this.imgsrc
+            computed: {
+                ret_img() {
+                    return this.imgsrc
+                }
             }
-        }
         },
         template: `
         <h1 v-if="!turn_flag">{{ a_name }}が出題者です</h1>
@@ -201,9 +239,9 @@ app.component(
 app.component(
     'turn-guess',
     {
-        data(){
-            return{
-                
+        data() {
+            return {
+
             }
         },
         template: `
@@ -216,8 +254,8 @@ app.component(
 app.component(
     'answer',
     {
-        data(){
-            return{
+        data() {
+            return {
                 word_list: QuizData.word_list,
                 select_list: [], //回答者が選択した単語リスト
                 imgsrc: QuizData.imgsrc,
@@ -227,38 +265,38 @@ app.component(
             }
         },
         methods: {
-            input_answer(word){
+            input_answer(word) {
                 this.btn_list = document.querySelectorAll('.word');
                 let old_word = "";
-                if(!this.select_list.includes(word)){
-                    if(this.select_list.length >= MAXLEN){
+                if (!this.select_list.includes(word)) {
+                    if (this.select_list.length >= MAXLEN) {
                         old_word = this.select_list[0];
                         this.select_list.push(word);
                         this.select_list.shift();
                     }
-                    else{
+                    else {
                         this.select_list.push(word);
                     }
-                }else{
+                } else {
                     old_word = word;
-                    this.select_list.splice(this.select_list.indexOf(old_word),1);
+                    this.select_list.splice(this.select_list.indexOf(old_word), 1);
                 }
 
                 // this.select_list = Array.from(new Set(this.select_list));
 
-                for(let i = 0; i < this.btn_list.length; i++){
-                    if(old_word == this.btn_list[i].id){
+                for (let i = 0; i < this.btn_list.length; i++) {
+                    if (old_word == this.btn_list[i].id) {
                         this.btn_list[i].style.color = "#000";
                         this.btn_list[i].style.background = "#fff";
-                    }else if(word == this.btn_list[i].id){
+                    } else if (word == this.btn_list[i].id) {
                         this.btn_list[i].style.color = "#fff";
                         this.btn_list[i].style.background = "#000";
                     }
                 }
                 return console.log(word);
             },
-            guess_answer(){
-                for(let i = 0; i < this.select_list.length; i++){
+            guess_answer() {
+                for (let i = 0; i < this.select_list.length; i++) {
                     let len = QuizData.select_list.length;
                     let checklist = QuizData.select_list.slice();
 
@@ -266,19 +304,19 @@ app.component(
                     // QuizData.spec_list.push(this.select_list[i]);
                     checklist.push(this.select_list[i]);
                     let newlist = new Set(checklist);
-                    if(newlist.size == len){
+                    if (newlist.size == len) {
                         this.point++;
                     }
                 }
                 QuizData.point = this.point;
                 console.log(`現在の得点は${QuizData.point}です`);
-                
+
                 //turn_flagがfalseのときBのポイント,trueの時Aのポイントに加算
-                if (QuizData.turn_flag){
-                    QuizData.b_point+=QuizData.point;
-                }else{
-                    QuizData.a_point+=QuizData.point;
-                    
+                if (QuizData.turn_flag) {
+                    QuizData.b_point += QuizData.point;
+                } else {
+                    QuizData.a_point += QuizData.point;
+
                 }
                 console.log(`現在のAの得点は${QuizData.a_point}です`);
                 console.log(`現在のBの得点は${QuizData.b_point}です`);
@@ -309,31 +347,31 @@ app.component(
 app.component(
     'result',
     {
-        data(){
-            return{
+        data() {
+            return {
                 point: QuizData.point,
                 imgsrc: QuizData.imgsrc,
-                a_point:QuizData.a_point,
-                b_point:QuizData.b_point,
-                select_list:QuizData.select_list,
+                a_point: QuizData.a_point,
+                b_point: QuizData.b_point,
+                select_list: QuizData.select_list,
                 spec_list: QuizData.spec_list,
                 a_name: QuizData.a_name,
                 b_name: QuizData.b_name,
             }
         },
         methods: {
-            next_turn(){
+            next_turn() {
                 QuizData.end_flag++;
-                if(QuizData.end_flag >= TIMES){
+                if (QuizData.end_flag >= TIMES) {
                     console.log("おわりました");
                     QuizData.componentId = "byebye"
-                }else{
+                } else {
                     QuizData.turn_flag = !QuizData.turn_flag;
                     QuizData.componentId = "select-word";
                 }
             }
         },
-        template:`
+        template: `
             <img id="img" :src="imgsrc" width="256" height="256" />
             <h1>{{ point }}点です</h1>
 
@@ -353,26 +391,26 @@ app.component(
 app.component( //最終ページ
     'byebye',
     {
-        data(){
-            return{
-                a_point:QuizData.a_point,
-                b_point:QuizData.b_point,
+        data() {
+            return {
+                a_point: QuizData.a_point,
+                b_point: QuizData.b_point,
                 a_name: QuizData.a_name,
                 b_name: QuizData.b_name,
             }
         },
-        
+
         methods: {
-            next_game(){
+            next_game() {
                 //次のゲームに向けて初期化
                 QuizData.a_point = 0;
                 QuizData.b_point = 0;
                 QuizData.end_flag = 0;
                 QuizData.turn_flag = false;
-                QuizData.componentId = "select-word";    
+                QuizData.componentId = "select-word";
             }
         },
-        template:`
+        template: `
             <h1>{{ a_name }}のポイントは{{a_point }}点です</h1>
             <h1>{{ b_name }}のポイントは{{ b_point }}点です</h1>
             <h1 v-if = "a_point > b_point">Aの勝利です</h1>
