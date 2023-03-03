@@ -18,6 +18,7 @@ const QuizData = reactive({
     b_point: 0,
     a_name: "",
     b_name: "",
+    result_doc: "次のターンに進む",
 });
 
 const app = createApp({
@@ -375,6 +376,7 @@ app.component(
                 spec_list: QuizData.spec_list,
                 a_name: QuizData.a_name,
                 b_name: QuizData.b_name,
+                result_doc: QuizData.result_doc,
             }
         },
         methods: {
@@ -384,6 +386,9 @@ app.component(
                     console.log("おわりました");
                     QuizData.componentId = "byebye"
                 }else{
+                    if(QuizData.end_flag + 1 == TIMES){
+                        QuizData.result_doc = "結果を見る"
+                    }
                     QuizData.turn_flag = !QuizData.turn_flag;
                     QuizData.componentId = "select-word";
                 }
@@ -403,7 +408,7 @@ app.component(
                 <span v-for="i in spec_list" class="new-selected">{{ i }}</span>
             </div>
             <p><span class="point">{{ point }}</span><span class="wwwww">point</span></p>
-            <button type="button" @click=next_turn class="btn btn-border make">次のターンに進む</button>
+            <button type="button" @click=next_turn class="btn btn-border make">{{ result_doc }}</button>
         `
     }
 )
