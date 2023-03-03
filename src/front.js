@@ -52,13 +52,31 @@ app.component(
             }
         },
         template: `
-            <div>
+            <div class="start">
                 <p class="title">AI Speculation Quiz</p>
                 <div>
-                    <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
-                    <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
-                    <button @click="start" class="btn btn-border">始める</button>
+                    <div class="inputs">
+                        <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
+                        <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー2の名前を入力してください" />
+                    </div>
+                    <div>
+                        <button @click="start" class="btn btn-border make">始める</button>
+                    </div>
                 </div>
+                
+                <h2>遊び方</h2>
+                このゲームは二人用です。
+                一台のPC、スマートフォンで遊ぶことを想定しています。
+                画像生成AI(<a href="https://labs.openai.com/">DALL-E</a>)を用いています。
+                <ol>
+                    <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
+                    <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
+                    <li>プレイヤー2は生成された画像を見て、生成に使われた単語を推測します。</li>
+                    <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
+                    <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
+                    <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
+                </ol>
+                <h3>Let's enjoy!!</h3>
             </div>
         `
     }
@@ -74,7 +92,10 @@ app.component(
                 select_list: [],
                 turn_flag:QuizData.turn_flag,
                 btn_list: document.querySelectorAll('.word'), //選択ボタンのDOMリストを取得
-                notok: false,
+                make_mes: "作成する",
+                imgsrc: QuizData.imgsrc,
+                made: false, //作成フラグ
+                notok: false, 
                 a_name: QuizData.a_name,
                 b_name: QuizData.b_name,
             }
@@ -114,7 +135,7 @@ app.component(
                 if(this.select_list.length > 0){
                     this.notok = false;
                     let words = `${this.select_list[0]} ${this.select_list[1]} ${this.select_list[2]}`
-                    let post = axios.post("http://localhost:3000/", { word: words }).then((response) => {
+                    let post = axios.post("/", { word: words }).then((response) => {
                         console.log("postで送信");
                         this.catchimg(response.data);
                     }).catch((err) =>{
@@ -128,12 +149,20 @@ app.component(
             catchimg(img){
                 //imgはbase64形式
                 QuizData.select_list = this.select_list; //正解を格納
-                this.select_list = [];
                 QuizData.imgsrc = "data:image/png;base64," + img;
-                // QuizData.turn_flag = !QuizData.turn_flag;
-                QuizData.componentId = "answer";
-                // document.getElementById("img").src = "data:image/png;base64," + img;
+                this.make_mes = "作り直す"
+                this.imgsrc = QuizData.imgsrc;
+                this.made = true;
+                
             },
+            set_q(){
+                QuizData.componentId = "answer";
+            },
+        computed:{
+            ret_img(){
+                return this.imgsrc
+            }
+        }
         },
         template: `
         <h1 v-if="!turn_flag">{{ a_name }}が出題者です</h1>
@@ -144,33 +173,28 @@ app.component(
                 <button @click="input_answer(i)" :id="i" class="btn btn-border word">{{ i }}</button>
             </div>
         </div>
-        <h3 class="selectword">選んでいる単語</h3>
-        <span v-for="i in select_list" :key="i" class="selected">
-            {{ i }}
-        </span>
+        <div class="selected_list">
+            <span v-for="i in select_list" :key="i" class="selected">
+                {{ i }}
+            </span>
+        </div>
         <div>
-            <button @click="makeimg" class="btn btn-border">
-                作成する
+            <button @click="makeimg" class="btn btn-border make">
+                {{ make_mes }}
+            </button>
+            <button v-if="made" @click="set_q" class="btn btn-border make">
+                出題する
             </button>
             <div v-if="notok">
                 単語を一つ以上選んでください
+            </div>
+            <div v-if="made">
+                <img id="img" :src="imgsrc" width="256" height="256"/>
             </div>
         </div>
         `
     }
 )
-
-// 作成者と推測者のターンをスイッチするためのフラグを変えるコンポーネント
-// app.component(
-//     'change-turn',
-//     {
-//         data: function(){
-//             turn_flag = false;
-//             return{
-//             }
-//         }
-//     }
-// )
 
 // 推測者のターンを表示するコンポーネント
 app.component(
@@ -270,11 +294,13 @@ app.component(
                     <button @click="input_answer(i)" :id="i" class="btn btn-border word">{{ i }}</button>
                 </div>
             </div>
-            <h3>選んでいる単語</h3>
-            <div v-for="i in select_list" :key="i + '_s'">
-                <h4>{{ i }}</h4>
+            <h2>選んでいる単語</h2>
+            <div class="selected_list">
+                <span v-for="i in select_list" :key="i" class="selected">
+                    {{ i }}
+                </span>
             </div>
-            <button type="button" @click=guess_answer class="btn btn-border">推測する</button>
+            <button type="button" @click=guess_answer class="btn btn-border make">推測する</button>
         `
     }
 )
@@ -319,11 +345,11 @@ app.component(
                 {{ i }}
             </div>
             <p>で推測しています</p>
-            <button type="button" @click=next_turn class="btn btn-border">次のターンに進む</button>
+            <button type="button" @click=next_turn class="btn btn-border make">次のターンに進む</button>
         `
     }
 )
-app.component(
+app.component( //最終ページ
     'byebye',
     {
         data(){

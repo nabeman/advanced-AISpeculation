@@ -9,15 +9,69 @@ html {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 62.5%;/*rem算出をしやすくするために*/
+  height: 100%;
 }
 
 body{
+    margin: 0;
+    padding: 0;
+    height:100%;
     width: 100%;
     text-align: center;
+    /* background: #08df9e; */
+    background: #025c39;
+    /* background: #00081a; */
+}
+
+h1, h2, h3{
+  color: aliceblue;
+  margin-top: 0;
 }
 
 #main{
     text-align: center;
+    height: 100%;
+    margin-top: 2%;
+}
+
+.title{
+  display: inline-block;
+  font-size: 100px;
+  color: aliceblue;
+  font-family: 'Sawarabi Mincho';
+  vertical-align: middle;
+}
+
+.start{
+  display: inline-block;
+  vertical-align: middle;
+  padding-top: 10%;
+}
+
+.selected{
+  color: aliceblue;
+  font-size: 24px;
+}
+
+.inputs{
+  margin-bottom: 40px;
+}
+
+.inputname{
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 400px;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #1d1d1d;
+  outline: none;
+}
+
+.make{
+  padding: 15px 60px;
+  margin: 10px 30px 20px 30px;
 }
 
 .btn-border {
@@ -37,7 +91,7 @@ body{
     line-height: 1.5;
     position: relative;
     display: inline-block;
-    padding: 1rem 4rem;
+    /* padding: 1rem 4rem; */
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -58,7 +112,7 @@ body{
     width: 40%;
     display: flex;
     flex-wrap: wrap;
-    margin: 5% auto;
+    margin: 2% auto;
     text-align: center;
     justify-content: center;
 }
@@ -70,7 +124,7 @@ body{
 .word {
     width: 145px;
     height: 60px;
-    margin: 60px;
+    margin: 0px 0px 60px 0px;
 }
 
 .selected{
@@ -78,3 +132,7 @@ body{
     margin: 0% 1%;
 }
 
+.selected_list{
+  margin-top: -60px;
+  height: 50px;
+}
