@@ -78,7 +78,9 @@ app.component(
                 select_list: [],
                 turn_flag:QuizData.turn_flag,
                 btn_list: document.querySelectorAll('.word'), //選択ボタンのDOMリストを取得
-                notok: false,
+                imgsrc: QuizData.imgsrc,
+                made: false, //作成フラグ
+                notok: false, 
                 a_name: QuizData.a_name,
                 b_name: QuizData.b_name,
             }
@@ -132,12 +134,19 @@ app.component(
             catchimg(img){
                 //imgはbase64形式
                 QuizData.select_list = this.select_list; //正解を格納
-                this.select_list = [];
                 QuizData.imgsrc = "data:image/png;base64," + img;
-                // QuizData.turn_flag = !QuizData.turn_flag;
-                QuizData.componentId = "answer";
-                // document.getElementById("img").src = "data:image/png;base64," + img;
+                this.imgsrc = QuizData.imgsrc;
+                this.made = true;
+                
             },
+            set_q(){
+                QuizData.componentId = "answer";
+            },
+        computed:{
+            ret_img(){
+                return this.imgsrc
+            }
+        }
         },
         template: `
         <h1 v-if="!turn_flag">{{ a_name }}が出題者です</h1>
@@ -156,25 +165,19 @@ app.component(
             <button @click="makeimg" class="btn btn-border">
                 作成する
             </button>
+            <button v-if="made" @click="set_q" class="btn btn-border">
+                出題する
+            </button>
             <div v-if="notok">
                 単語を一つ以上選んでください
+            </div>
+            <div v-if="made">
+                <img id="img" :src="imgsrc" width="256" height="256"/>
             </div>
         </div>
         `
     }
 )
-
-// 作成者と推測者のターンをスイッチするためのフラグを変えるコンポーネント
-// app.component(
-//     'change-turn',
-//     {
-//         data: function(){
-//             turn_flag = false;
-//             return{
-//             }
-//         }
-//     }
-// )
 
 // 推測者のターンを表示するコンポーネント
 app.component(
