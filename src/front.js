@@ -6,6 +6,7 @@ const TIMES = 4; //繰り返す回数
 const QuizData = reactive({
     word_list: ["tomato", "internet", "urban", "design", "game", "glass", "money", "book", "beach"],
     select_list: [], //画像生成に選んだ単語リスト
+    spec_list: [], //推測者が選んだリスト
     imgsrc: "",
     turn_flag: false, //選ぶ人 false-> A, true->B
     end_flag: 0,      //終了判定フラグ
@@ -200,22 +201,24 @@ app.component(
                 }
                 console.log(`現在のAの得点は${QuizData.a_point}です`);
                 console.log(`現在のBの得点は${QuizData.b_point}です`);
-
+                QuizData.spec_list = this.select_list;
                 QuizData.componentId = "result";
             }
         },
         template: `
             <h1 v-if="turn_flag">Aが回答者です</h1>
             <h1 v-else>Bが回答者です</h1>
-            <img id="img" :src="imgsrc" width="1024" height="1024" />
-            <div v-for="i in word_list" :key="i">
-            <button @click="input_answer(i)" :id="i">{{ i }}</button>
+            <img id="img" :src="imgsrc" width="256" height="256"/>
+            <div class="wordbtn">
+                <div v-for="i in word_list" :key="i" class="btndiv">
+                    <button @click="input_answer(i)" :id="i" class="btn btn-border word">{{ i }}</button>
+                </div>
             </div>
             <h3>選んでいる単語</h3>
             <div v-for="i in select_list" :key="i + '_s'">
                 <h4>{{ i }}</h4>
             </div>
-            <button type="button" @click=guess_answer>推測する</button>
+            <button type="button" @click=guess_answer class="btn btn-border">推測する</button>
         `
     }
 )
@@ -229,8 +232,8 @@ app.component(
                 imgsrc: QuizData.imgsrc,
                 a_point:QuizData.a_point,
                 b_point:QuizData.b_point,
-                select_list:QuizData.select_list
-                // end_flag:QuizData.end_flag
+                select_list:QuizData.select_list,
+                spec_list: QuizData.spec_list,
             }
         },
         methods: {
@@ -246,7 +249,7 @@ app.component(
             }
         },
         template:`
-            <img id="img" :src="imgsrc" width="1024" height="1024" />
+            <img id="img" :src="imgsrc" width="256" height="256" />
             <h1>{{ point }}点です</h1>
 
             <h1 >この画像は…
@@ -254,7 +257,11 @@ app.component(
             を用いて生成されました</h1>
             <h1>Aのポイントは{{ a_point }}点です</h1>
             <h1>Bのポイントは{{ b_point }}点です</h1>
-            <button type="button" @click=next_turn>次のターンに進む</button>
+            <div v-for="i in spec_list">
+                {{ i }}
+            </div>
+            <p>で推測しています</p>
+            <button type="button" @click=next_turn class="btn btn-border">次のターンに進む</button>
         `
     }
 )
