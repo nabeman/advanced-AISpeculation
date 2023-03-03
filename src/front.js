@@ -41,21 +41,28 @@ app.component(
                 select_list: [],
                 turn_flag:QuizData.turn_flag,
                 btn_list: document.querySelectorAll('.word'), //選択ボタンのDOMリストを取得
-
+                notok: false
             }
         },
         methods: {
             input_answer(word){
                 this.btn_list = document.querySelectorAll('.word');
                 let old_word = "";
-                if(this.select_list.length >= MAXLEN){
-                    old_word = this.select_list[0];
-                    this.select_list.push(word);
-                    this.select_list.shift();
+                if(!this.select_list.includes(word)){
+                    if(this.select_list.length >= MAXLEN){
+                        old_word = this.select_list[0];
+                        this.select_list.push(word);
+                        this.select_list.shift();
+                    }
+                    else{
+                        this.select_list.push(word);
+                    }
+                }else{
+                    old_word = word;
+                    this.select_list.splice(this.select_list.indexOf(old_word),1);
                 }
-                else{
-                    this.select_list.push(word);
-                }
+
+                // this.select_list = Array.from(new Set(this.select_list));
 
                 for(let i = 0; i < this.btn_list.length; i++){
                     if(old_word == this.btn_list[i].id){
@@ -69,14 +76,19 @@ app.component(
                 return console.log(word);
             },
             makeimg(){
-                let words = `${this.select_list[0]} ${this.select_list[1]} ${this.select_list[2]}`
-                let post = axios.post("http://localhost:3000/", { word: words }).then((response) => {
-                    console.log("postで送信");
-                    this.catchimg(response.data);
-                }).catch((err) =>{
-                    console.log("エラー");           
-                    console.log(err);    
-                });
+                if(this.select_list.length > 0){
+                    this.notok = false;
+                    let words = `${this.select_list[0]} ${this.select_list[1]} ${this.select_list[2]}`
+                    let post = axios.post("http://localhost:3000/", { word: words }).then((response) => {
+                        console.log("postで送信");
+                        this.catchimg(response.data);
+                    }).catch((err) =>{
+                        console.log("エラー");           
+                        console.log(err);    
+                    });
+                }else{
+                    this.notok = true;
+                }
             },
             catchimg(img){
                 //imgはbase64形式
@@ -105,6 +117,9 @@ app.component(
             <button @click="makeimg" class="btn btn-border">
                 作成する
             </button>
+            <div v-if="notok">
+                単語を一つ以上選んでください
+            </div>
         </div>
         `
     }
