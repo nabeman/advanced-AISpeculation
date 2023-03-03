@@ -4,7 +4,7 @@ const MAXLEN = 3;
 const TIMES = 4; //繰り返す回数
 
 const QuizData = reactive({
-    word_list: ["tomato", "internet", "urban", "design", "game", "glass", "money", "book"],
+    word_list: ["tomato", "internet", "urban", "design", "game", "glass", "money", "book", "beach"],
     select_list: [], //画像生成に選んだ単語リスト
     imgsrc: "",
     turn_flag: false, //選ぶ人 false-> A, true->B
@@ -39,17 +39,32 @@ app.component(
             return{
                 word_list: QuizData.word_list,
                 select_list: [],
-                turn_flag:QuizData.turn_flag
+                turn_flag:QuizData.turn_flag,
+                btn_list: document.querySelectorAll('.word'), //選択ボタンのDOMリストを取得
+
             }
         },
         methods: {
             input_answer(word){
+                this.btn_list = document.querySelectorAll('.word');
+                let old_word = "";
                 if(this.select_list.length >= MAXLEN){
+                    old_word = this.select_list[0];
                     this.select_list.push(word);
                     this.select_list.shift();
                 }
                 else{
                     this.select_list.push(word);
+                }
+
+                for(let i = 0; i < this.btn_list.length; i++){
+                    if(old_word == this.btn_list[i].id){
+                        this.btn_list[i].style.color = "#000";
+                        this.btn_list[i].style.background = "#fff";
+                    }else if(word == this.btn_list[i].id){
+                        this.btn_list[i].style.color = "#fff";
+                        this.btn_list[i].style.background = "#000";
+                    }
                 }
                 return console.log(word);
             },
@@ -77,16 +92,20 @@ app.component(
         <h1 v-if="!turn_flag">Aが出題者です</h1>
         <h1 v-else>Bが出題者です</h1>
         <h2>単語を3つ選んでください</h2>
-        <div v-for="i in word_list" :key="i">
-            <button @click="input_answer(i)" :id="i">{{ i }}</button>
+        <div class="wordbtn">
+            <div v-for="i in word_list" :key="i" class="btndiv">
+                <button @click="input_answer(i)" :id="i" class="btn btn-border word">{{ i }}</button>
+            </div>
         </div>
-        <h3>選んでいる単語</h3>
-        <div v-for="i in select_list" :key="i">
-            <h4>{{ i }}</h4>
+        <h3 class="selectword">選んでいる単語</h3>
+        <span v-for="i in select_list" :key="i" class="selected">
+            {{ i }}
+        </span>
+        <div>
+            <button @click="makeimg" class="btn btn-border">
+                作成する
+            </button>
         </div>
-        <button @click="makeimg">
-            作成する
-        </button>
         `
     }
 )
