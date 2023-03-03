@@ -57,7 +57,7 @@ app.component(
                 <div>
                     <div class="inputs">
                         <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
-                        <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
+                        <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー2の名前を入力してください" />
                     </div>
                     <div>
                         <button @click="start" class="btn btn-border">始める</button>

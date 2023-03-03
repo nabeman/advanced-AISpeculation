@@ -18,7 +18,13 @@ body{
     height:100%;
     width: 100%;
     text-align: center;
-    background: #08df9e;
+    /* background: #08df9e; */
+    background: #025c39;
+    /* background: #00081a; */
+}
+
+h1, h2, h3{
+  color: aliceblue;
 }
 
 #main{
@@ -28,7 +34,9 @@ body{
 
 .title{
   display: inline-block;
-  font-size: 80px;
+  font-size: 100px;
+  color: aliceblue;
+  font-family: 'Sawarabi Mincho';
   vertical-align: middle;
 }
 
@@ -45,12 +53,12 @@ body{
 .inputname{
   margin-left: 20px;
   margin-right: 20px;
-  width: 500px;
+  width: 400px;
   padding: 15px;
   border: none;
   border-radius: 5px;
   font-size: 16px;
-  color: #a0a0a0;
+  color: #1d1d1d;
   outline: none;
 }
 
