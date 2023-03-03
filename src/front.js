@@ -175,6 +175,7 @@ app.component(
                     let words = `${this.select_list[0]} ${this.select_list[1]} ${this.select_list[2]}`
                     let post = axios.post("/", { word: words }).then((response) => {
                         console.log("postで送信");
+                        console.log(response);
                         this.catchimg(response.data);
                     }).catch((err) => {
                         console.log("エラー");
