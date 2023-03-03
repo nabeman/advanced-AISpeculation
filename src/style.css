@@ -25,11 +25,13 @@ body{
 
 h1, h2, h3{
   color: aliceblue;
+  margin-top: 0;
 }
 
 #main{
     text-align: center;
     height: 100%;
+    margin-top: 2%;
 }
 
 .title{
@@ -46,6 +48,11 @@ h1, h2, h3{
   padding-top: 10%;
 }
 
+.selected{
+  color: aliceblue;
+  font-size: 24px;
+}
+
 .inputs{
   margin-bottom: 40px;
 }
@@ -60,6 +67,11 @@ h1, h2, h3{
   font-size: 16px;
   color: #1d1d1d;
   outline: none;
+}
+
+.make{
+  padding: 15px 60px;
+  margin: 10px 30px 20px 30px;
 }
 
 .btn-border {
@@ -79,7 +91,7 @@ h1, h2, h3{
     line-height: 1.5;
     position: relative;
     display: inline-block;
-    padding: 1rem 4rem;
+    /* padding: 1rem 4rem; */
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -100,7 +112,7 @@ h1, h2, h3{
     width: 40%;
     display: flex;
     flex-wrap: wrap;
-    margin: 5% auto;
+    margin: 2% auto;
     text-align: center;
     justify-content: center;
 }
@@ -112,7 +124,7 @@ h1, h2, h3{
 .word {
     width: 145px;
     height: 60px;
-    margin: 60px;
+    margin: 0px 0px 60px 0px;
 }
 
 .selected{
@@ -120,3 +132,7 @@ h1, h2, h3{
     margin: 0% 1%;
 }
 
+.selected_list{
+  margin-top: -60px;
+  height: 50px;
+}
