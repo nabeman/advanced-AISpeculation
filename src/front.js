@@ -147,7 +147,7 @@ app.component(
                     let checklist = QuizData.select_list.slice();
 
                     console.log(QuizData.select_list);
-                    QuizData.spec_list.push(this.select_list[i]);
+                    // QuizData.spec_list.push(this.select_list[i]);
                     checklist.push(this.select_list[i]);
                     let newlist = new Set(checklist);
                     if(newlist.size == len){
@@ -214,7 +214,6 @@ app.component(
         template:`
             <img id="img" :src="imgsrc" width="1024" height="1024" />
             <h1>{{ point }}点です</h1>
-            <h1>推測：</h1>
 
             <h1 >この画像は…
             <div v-for="i in select_list">{{i}},</div>
@@ -248,7 +247,6 @@ app.component(
         template:`
             <h1>Aのポイントは{{a_point }}点です</h1>
             <h1>Bのポイントは{{ b_point }}点です</h1>
-            // 勝敗判定
             <h1 v-if = "a_point > b_point">Aの勝利です</h1>
             <h1 v-else-if="a_point < b_point" >Bの勝利です</h1>
             <h1 v-else>引き分けだぁ！</h1>
