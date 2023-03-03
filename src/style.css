@@ -19,9 +19,10 @@ body{
     width: 100%;
     text-align: center;
     /* background: #08df9e; */
-    background: #025c39;
-    /* background: #00081a; */
-}
+    /* background: #025c39; */
+    background: #2f0155;
+    /* background: #500072; */
+  }
 
 h1, h2, h3{
   color: aliceblue;
@@ -31,7 +32,7 @@ h1, h2, h3{
 #main{
     text-align: center;
     height: 100%;
-    margin-top: 2%;
+    margin-top: 1%;
 }
 
 .title{
@@ -72,6 +73,11 @@ h1, h2, h3{
 .make{
   padding: 15px 60px;
   margin: 10px 30px 20px 30px;
+}
+
+button{
+  position: relative;
+  z-index: 1;
 }
 
 .btn-border {
@@ -133,6 +139,61 @@ h1, h2, h3{
 }
 
 .selected_list{
-  margin-top: -60px;
+  /* margin-top: -60px; */
   height: 50px;
+}
+
+.h2class{
+  margin-top: -60px;
+}
+
+.howto{
+  position:relative;
+
+}
+
+.toggle{
+  position: absolute;
+  padding: 15px 60px;
+  right: 5px;
+  top: 5px;
+  transition: all 0.5s;
+  /* background: #025c39; */
+}
+
+.show_how{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateY(-50%) translateX(-50%);
+
+  font-size: 24px;
+  padding: 20px 20px;
+  height: 700px;
+  background: white;
+  opacity: 0.9;
+  z-index: 10;
+  border-radius: 10px;
+}
+
+.h2play{
+  color:#000
+}
+
+li{
+  margin-bottom: 15px;
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.aaa{
+  margin-right: 10px;
 }

@@ -1,4 +1,7 @@
 const { createApp, reactive } = Vue;
+const  SelfBuildingSquareSpinner = window['epic-spinners'].SelfBuildingSquareSpinner;
+console.log(window['epic-spinners'].SelfBuildingSquareSpinner)
+console.log(SelfBuildingSquareSpinner)
 // const { axios } = Axios;
 const MAXLEN = 3;
 const TIMES = 4; //繰り返す回数
@@ -22,6 +25,20 @@ const app = createApp({
         return{
             componentId: QuizData.componentId,
             turn_flag: QuizData.turn_flag,
+            how_to: false,
+        }
+    },
+    methods:{
+        toggle_how(){
+            let btn = document.querySelector('.toggle')
+            if(!this.how_to){
+                btn.style.background = "#000";
+                btn.style.color = "#fff";
+            }else{
+                btn.style.background = "#fff";
+                btn.style.color = "#000";
+            }
+            this.how_to = !this.how_to;
         }
     },
     computed: {
@@ -32,7 +49,55 @@ const app = createApp({
             return QuizData.turn_flag;
         }
     },
-})
+    
+});
+
+app.component(
+    'epic-spin',
+    {
+        template:`
+        <div class="self-building-square-spinner spinner">
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square clear"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+            <div class="square clear"></div>
+            <div class="square"></div>
+            <div class="square"></div>
+        </div>
+        `
+    }
+)
+
+app.component(
+    'how-to',
+    {
+        data(){
+            return{
+
+            }
+        },
+        template: `
+            <div class="show_how">
+                <h2 class="h2play">遊び方</h2>
+                このゲームは二人用です。
+                一台のPC、スマートフォンで遊ぶことを想定しています。
+                画像生成AI(<a href="https://labs.openai.com/">DALL-E</a>)を用いています。
+                <ol>
+                    <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
+                    <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
+                    <li>プレイヤー2は生成された画像を見て、生成に使われた単語を推測します。</li>
+                    <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
+                    <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
+                    <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
+                </ol>
+                <h3 class="h2play">Let's enjoy!!</h3>
+            </div>
+        `
+    }
+)
 
 app.component(
     'start',
@@ -63,20 +128,6 @@ app.component(
                         <button @click="start" class="btn btn-border make">始める</button>
                     </div>
                 </div>
-                
-                <h2>遊び方</h2>
-                このゲームは二人用です。
-                一台のPC、スマートフォンで遊ぶことを想定しています。
-                画像生成AI(<a href="https://labs.openai.com/">DALL-E</a>)を用いています。
-                <ol>
-                    <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
-                    <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
-                    <li>プレイヤー2は生成された画像を見て、生成に使われた単語を推測します。</li>
-                    <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
-                    <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
-                    <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
-                </ol>
-                <h3>Let's enjoy!!</h3>
             </div>
         `
     }
@@ -93,6 +144,7 @@ app.component(
                 turn_flag:QuizData.turn_flag,
                 btn_list: document.querySelectorAll('.word'), //選択ボタンのDOMリストを取得
                 make_mes: "作成する",
+                loading: false,
                 imgsrc: QuizData.imgsrc,
                 made: false, //作成フラグ
                 notok: false, 
@@ -133,10 +185,12 @@ app.component(
             },
             makeimg(){
                 if(this.select_list.length > 0){
+                    this.loading = true;
                     this.notok = false;
                     let words = `${this.select_list[0]} ${this.select_list[1]} ${this.select_list[2]}`
                     let post = axios.post("/", { word: words }).then((response) => {
                         console.log("postで送信");
+                        this.loading = false;
                         this.catchimg(response.data);
                     }).catch((err) =>{
                         console.log("エラー");           
@@ -187,6 +241,9 @@ app.component(
             </button>
             <div v-if="notok">
                 単語を一つ以上選んでください
+            </div>
+            <div v-if="loading">
+                <epic-spin></epic-spin>
             </div>
             <div v-if="made">
                 <img id="img" :src="imgsrc" width="256" height="256"/>
@@ -294,7 +351,7 @@ app.component(
                     <button @click="input_answer(i)" :id="i" class="btn btn-border word">{{ i }}</button>
                 </div>
             </div>
-            <h2>選んでいる単語</h2>
+            <h2 class="h2class">選んでいる単語</h2>
             <div class="selected_list">
                 <span v-for="i in select_list" :key="i" class="selected">
                     {{ i }}
