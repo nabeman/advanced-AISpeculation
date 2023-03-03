@@ -1,11 +1,10 @@
-// //初回のみモーダルをすぐ出す判定。flagがモーダル表示のstart_open後に代入される
-// var access = $.cookie('access')
-// if(!access){
-//   flag = true;
-//   $.cookie('access', false);
-// }else{
-//   flag = false  
-// }
+window.onload = function() {
+  const spinner = document.getElementById('loading');
+ 
+  // Add .loaded to .loading
+  spinner.classList.add('loaded');
+}
+
 //モーダル表示
 $(".inline").modaal({
     // start_open:flag,
