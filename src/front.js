@@ -115,6 +115,8 @@ app.component(
         },
         methods: {
             start(){
+                if(this.a_name == "") this.a_name = "プレイヤー1";
+                if(this.b_name == "") this.b_name = "プレイヤー2";
                 QuizData.a_name = this.a_name;
                 QuizData.b_name = this.b_name;
     
@@ -126,8 +128,8 @@ app.component(
                 <p class="title">AI Speculation Quiz</p>
                 <div>
                     <div class="inputs">
-                        <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
-                        <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー2の名前を入力してください" />
+                        <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1" />
+                        <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー2" />
                     </div>
                     <div>
                         <button @click="start" class="btn btn-border make">始める</button>
