@@ -135,7 +135,7 @@ app.component(
                 if(this.select_list.length > 0){
                     this.notok = false;
                     let words = `${this.select_list[0]} ${this.select_list[1]} ${this.select_list[2]}`
-                    let post = axios.post("http://localhost:3000/", { word: words }).then((response) => {
+                    let post = axios.post("/", { word: words }).then((response) => {
                         console.log("postで送信");
                         this.catchimg(response.data);
                     }).catch((err) =>{
