@@ -74,11 +74,15 @@ app.component(
                 このゲームは二人用です。
                 一台のPC、スマートフォンで遊ぶことを想定しています。
                 画像生成AI(<a href="https://labs.openai.com/">DALL-E</a>)を用いています。
-                <ol>
-                    <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
-                    <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
-                </ol>
-                <div class="right"><a href="#inline2" class="inline2">次へ</a></div>
+                    <ol>
+                        <li>プレイヤー1が9個の単語の中から1~3個選びます。</li>
+                        <li>選んだ単語を基に画像が自動生成され、プレイヤー2が推測するターンになります</li>
+                    </ol>
+                    <div class="right">
+                        <div class="btn-box">
+                            <a href="#inline2" class="inline2 btn btn-border make">次へ</a>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modaal" id="inline2" style="display:none;">
@@ -87,8 +91,16 @@ app.component(
                         <li>プレイヤー1が選んだ単語とプレイヤー2が選んだ単語が照合され、一致した単語数がプレイヤー2のポイントとして加算されます。</li>
                     </ol>
                     <div class="flex-btn">
-                        <div class="left"><a href="#inline" class="inline">戻る</a></div>
-                        <div class="right"><a href="#inline3" class="inline3">次へ</a></div>
+                        <div class="left">
+                            <div class="btn-box">
+                                <a href="#inline" class="inline btn btn-border make">戻る</a>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="btn-box">
+                                <a href="#inline3" class="inline3 btn btn-border make">次へ</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -97,7 +109,11 @@ app.component(
                         <li>プレイヤー1とプレイヤー2の役割を交代します。</li>
                         <li> 1~5を4回繰り返し、最終ポイントが高いほうが勝利です。</li>
                     </ol>
-                    <div class="left"><a href="#inline2" class="inline2">戻る</a></div>
+                    <div class="left">
+                        <div class="btn-box">
+                            <a href="#inline2" class="inline2 btn-box btn btn-border make">戻る</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         `

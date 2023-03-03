@@ -140,10 +140,13 @@ h1, h2, h3{
 }
 
 /* modal window に関して*/
+
 .modaal-content-container {
   padding: 20px;
   background-color:#fff;
   outline: 1rem double #1cf7a3;
+  font-size: xx-large;
+
 }
 .flex-btn{
   display: flex;
@@ -158,4 +161,12 @@ h1, h2, h3{
   /* float: left; */
   display: flex;
   justify-content: flex-start;
+
+}
+
+.btn-box{
+  display: inline-block;
+}
+a{
+  text-decoration: none;
 }
