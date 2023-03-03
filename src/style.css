@@ -26,6 +26,8 @@ body{
 h1, h2, h3{
   color: aliceblue;
   margin-top: 0;
+  font-family: 'Sawarabi Mincho';
+
 }
 
 #main{
@@ -135,4 +137,11 @@ h1, h2, h3{
 .selected_list{
   margin-top: -60px;
   height: 50px;
+}
+
+/* modal window に関して*/
+.modaal-content-container {
+  padding: 20px;
+  background-color:#fff;
+  outline: 1rem double #1cf7a3;
 }
