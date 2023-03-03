@@ -1,7 +1,7 @@
 const { createApp, reactive } = Vue;
 // const { axios } = Axios;
 const MAXLEN = 3;
-const TIMES = 4; //繰り返す回数
+const TIMES = 2; //繰り返す回数
 
 const QuizData = reactive({
     word_list: ["tomato", "internet", "urban", "design", "game", "glass", "money", "book", "beach"],
@@ -56,8 +56,8 @@ app.component(
                 <p class="title">AI Speculation Quiz</p>
                 <div>
                     <div class="inputs">
-                        <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
-                        <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー2の名前を入力してください" />
+                        <input v-model="a_name" class="inputname player1" type="text" placeholder="プレイヤー1の名前を入力してください" />
+                        <input v-model="b_name" class="inputname player2" type="text" placeholder="プレイヤー2の名前を入力してください" />
                     </div>
                     <div>
                         <button @click="start" class="btn btn-border make">始める</button>
@@ -203,9 +203,9 @@ app.component(
             }
         },
         template: `
-        <h1 v-if="!turn_flag">{{ a_name }}が出題者です</h1>
-        <h1 v-else>{{ b_name }}が出題者です</h1>
-        <h2>単語を3つ選んでください</h2>
+        <h1 v-if="!turn_flag" class="player1"><span style="font-size:2em;">{{ a_name }}</span>  が出題者です</h1>
+        <h1 v-else class="player2"><span style="font-size:2em;">{{ b_name }}</span>  が出題者です</h1>
+        <h3>単語を1～3つ選んでください</h3>
         <div class="wordbtn">
             <div v-for="i in word_list" :key="i" class="btndiv">
                 <button @click="input_answer(i)" :id="i" class="btn btn-border word">{{ i }}</button>
@@ -256,6 +256,7 @@ app.component(
         data() {
             return {
                 word_list: QuizData.word_list,
+                turn_flag: QuizData.turn_flag,
                 select_list: [], //回答者が選択した単語リスト
                 imgsrc: QuizData.imgsrc,
                 point: 0,
@@ -312,9 +313,9 @@ app.component(
 
                 //turn_flagがfalseのときBのポイント,trueの時Aのポイントに加算
                 if (QuizData.turn_flag) {
-                    QuizData.b_point += QuizData.point;
-                } else {
                     QuizData.a_point += QuizData.point;
+                } else {
+                    QuizData.b_point += QuizData.point;
 
                 }
                 console.log(`現在のAの得点は${QuizData.a_point}です`);
@@ -324,8 +325,8 @@ app.component(
             }
         },
         template: `
-            <h1 v-if="turn_flag">{{ a_name }}が回答者です</h1>
-            <h1 v-else>{{ b_name }}が回答者です</h1>
+            <h1 v-if="turn_flag" class="player1"><span style="font-size:2em;">{{ a_name }}</span>  が回答者です</h1>
+            <h1 v-else class="player2"><span style="font-size:2em;">{{ b_name }}</span>  が回答者です</h1>
             <img id="img" :src="imgsrc" width="256" height="256"/>
             <div class="wordbtn">
                 <div v-for="i in word_list" :key="i" class="btndiv">
@@ -350,6 +351,7 @@ app.component(
             return {
                 point: QuizData.point,
                 imgsrc: QuizData.imgsrc,
+                turn_flag: QuizData.turn_flag,
                 a_point: QuizData.a_point,
                 b_point: QuizData.b_point,
                 select_list: QuizData.select_list,
@@ -372,17 +374,17 @@ app.component(
         },
         template: `
             <img id="img" :src="imgsrc" width="256" height="256" />
-            <h1>{{ point }}点です</h1>
-
+            <h1><span style="font-size:2em;">{{ point }}</span>つ正解!!</h1>
+            <h2 v-if="turn_flag">{{ a_name }}の予想: <span v-for="i in spec_list" style="font-size:2em;" class="blackwords">「{{ i }}」  </span></h2>
+            <h2 v-else>{{ b_name }}の予想: <span v-for="i in spec_list" style="font-size:2em;" class="blackwords">「{{ i }}」  </span></h2>
             <h1 >この画像は…
-            <div v-for="i in select_list">{{i}},</div>
+            <span v-for="i in select_list" style="font-size:2em;" class="blackwords">「{{i}}」  </span>
             を用いて生成されました</h1>
-            <h1>{{ a_name }}のポイントは{{ a_point }}点です</h1>
-            <h1>{{ b_name }}のポイントは{{ b_point }}点です</h1>
-            <div v-for="i in spec_list">
-                {{ i }}
-            </div>
-            <p>で推測しています</p>
+            <h1>現在の得点</h1>
+            <h2 class="player1">{{ a_name }}: <span style="font-size:2em;">{{ a_point }}</span>点</h2>
+            <h2 class="player2">{{ b_name }}: <span style="font-size:2em;">{{ b_point }}</span>点</h2>
+            
+            
             <button type="button" @click=next_turn class="btn btn-border make">次のターンに進む</button>
         `
     }
@@ -410,10 +412,10 @@ app.component( //最終ページ
             }
         },
         template: `
-            <h1>{{ a_name }}のポイントは{{a_point }}点です</h1>
-            <h1>{{ b_name }}のポイントは{{ b_point }}点です</h1>
-            <h1 v-if = "a_point > b_point">Aの勝利です</h1>
-            <h1 v-else-if="a_point < b_point" >Bの勝利です</h1>
+            <h1><span class="player1">{{ a_name }}</span> のポイントは<span style="font-size:2em;">{{a_point }}</span>点です</h1>
+            <h1><span class="player2">{{ b_name }}</span> のポイントは<span style="font-size:2em;">{{ b_point }}</span>点です</h1>
+            <h1 v-if = "a_point > b_point" class="player1"><span style="font-size:2em;">{{ a_name }}</span>の勝利です</h1>
+            <h1 v-else-if="a_point < b_point" class="player2"><span style="font-size:2em;">{{ b_name }}</span>の勝利です</h1>
             <h1 v-else>引き分けだぁ！</h1>
             <button type="button" @click=next_game>次のゲームへ</button>
         `
