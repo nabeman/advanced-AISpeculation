@@ -198,6 +198,7 @@ app.component(
                     let post = axios.post("/", { word: words }).then((response) => {
                         console.log("postで送信");
                         this.loading = false;
+                        console.log(response);
                         this.catchimg(response.data);
                     }).catch((err) =>{
                         console.log("エラー");           
