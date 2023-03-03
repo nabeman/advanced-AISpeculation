@@ -12,7 +12,9 @@ const QuizData = reactive({
     spec_list: [], //推測者が選んだリスト
     imgsrc: "",
     a_img: [], //aが生成した画像のsrc
+    a_wordlist: [],
     b_img: [], //bが生成した画像のsrc
+    b_wordlist: [],
     turn_flag: false, //選ぶ人 false-> A, true->B
     end_flag: 0,      //終了判定フラグ
     componentId: "start",
@@ -214,8 +216,10 @@ app.component(
             },
             set_q(){
                 if(!QuizData.turn_flag){
+                    QuizData.b_wordlist.push(this.select_list);
                     QuizData.b_img.push(this.imgsrc);
                 }else{
+                    QuizData.a_wordlist.push(this.select_list);
                     QuizData.a_img.push(this.imgsrc);
                 }
                 QuizData.componentId = "answer";
@@ -430,6 +434,8 @@ app.component( //最終ページ
                 b_name: QuizData.b_name,
                 a_img: QuizData.a_img,
                 b_img: QuizData.b_img,
+                a_wordlist: QuizData.a_wordlist,
+                b_wordlist: QuizData.b_wordlist,
             }
         },
         
@@ -441,20 +447,30 @@ app.component( //最終ページ
                 QuizData.end_flag = 0;
                 QuizData.turn_flag = false;
                 QuizData.componentId = "start";    
+                QuizData.a_img = [];
+                QuizData.a_wordlist = [];
+                QuizData.b_img = [];
+                QuizData.b_wordlist = [];
             }
         },
         template:`
         <div class="result_page">
             <div class="result_point">
                 {{ a_name }}のポイントは{{ a_point }}点です
-                <div v-for="i in a_img" class="result_img">
+                <div v-for="(i, index) in a_img" class="result_img">
                     <img :src="i" width="256" height="256" />
+                    <div class="answer">
+                        <span v-for="i in a_wordlist[index]" class="new-selected">{{ i }}</span>
+                    </div>
                 </div>
             </div>
             <div class="result_point">
                 {{ b_name }}のポイントは{{ b_point }}点です
-                <div v-for="i in b_img" class="result_img">
+                <div v-for="(i, index) in b_img" class="result_img">
                     <img :src="i" width="256" height="256" />
+                    <div class="answer">
+                        <span v-for="i in b_wordlist[index]" class="new-selected">{{ i }}</span>
+                    </div>
                 </div>
             </div>
         </div>

@@ -208,7 +208,7 @@ li{
 .new-selected{
   color: aliceblue;
   display: inline-block;
-  margin: 0% 1%;
+  margin: 0% 1.5%;
   font-size: 36px;
   font-weight: 500;
 }
@@ -236,8 +236,9 @@ li{
   display: inline-block;
   font-size: 30px;
   color: aliceblue;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-left: 40px;
+  margin-right: 40px;
+  white-space: nowrap;
 }
 
 .aiueo{
@@ -245,5 +246,5 @@ li{
 }
 
 .result_img{
-  margin: 10px 0px;
+  margin: 0px 0px;
 }
