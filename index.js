@@ -46,7 +46,7 @@ app.post('/', async (req, res) => {
 
 try{
     app.listen(PORT, () => {
-        console.log(`dev surver running at: http://localhost:${PORT}/`)
+        console.log(`dev surver running at: http://localhost:${PORT}/`);
     })
 }catch{
     if(e instanceof Error){
