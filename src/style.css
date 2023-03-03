@@ -9,15 +9,49 @@ html {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 62.5%;/*rem算出をしやすくするために*/
+  height: 100%;
 }
 
 body{
+    margin: 0;
+    padding: 0;
+    height:100%;
     width: 100%;
     text-align: center;
+    background: #08df9e;
 }
 
 #main{
     text-align: center;
+    height: 100%;
+}
+
+.title{
+  display: inline-block;
+  font-size: 80px;
+  vertical-align: middle;
+}
+
+.start{
+  display: inline-block;
+  vertical-align: middle;
+  padding-top: 10%;
+}
+
+.inputs{
+  margin-bottom: 40px;
+}
+
+.inputname{
+  margin-left: 20px;
+  margin-right: 20px;
+  width: 500px;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  color: #a0a0a0;
+  outline: none;
 }
 
 .btn-border {

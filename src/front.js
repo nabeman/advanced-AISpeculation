@@ -52,12 +52,16 @@ app.component(
             }
         },
         template: `
-            <div>
+            <div class="start">
                 <p class="title">AI Speculation Quiz</p>
                 <div>
-                    <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
-                    <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
-                    <button @click="start" class="btn btn-border">始める</button>
+                    <div class="inputs">
+                        <input v-model="a_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
+                        <input v-model="b_name" class="inputname" type="text" placeholder="プレイヤー1の名前を入力してください" />
+                    </div>
+                    <div>
+                        <button @click="start" class="btn btn-border">始める</button>
+                    </div>
                 </div>
             </div>
         `
